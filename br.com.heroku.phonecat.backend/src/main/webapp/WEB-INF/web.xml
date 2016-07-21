@@ -33,10 +33,26 @@
 		<url-pattern>/_ah/spi/*</url-pattern>
 	</servlet-mapping>
     
+	<!-- this filter enables CORS - Cross-origin resource sharing 
+		 is a mechanism that allows restricted resources (e.g. fonts) on a web page to be requested from another domain outside 
+		 the domain from which the resource originated
+	 -->
+	<filter>
+		<filter-name>CorsFilter</filter-name>
+		<filter-class>util.CORSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CorsFilter</filter-name>
+		<url-pattern>*</url-pattern>
+	</filter-mapping>
 
 
+	<!-- to use JSON extjs -->
 
-
+	<context-param>
+		<param-name>br.com.caelum.vraptor.packages</param-name>
+		<param-value>br.com.caelum.vraptor.util.extjs</param-value>
+	</context-param>
 
 
 </web-app>
