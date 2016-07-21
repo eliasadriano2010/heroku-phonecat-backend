@@ -51,6 +51,7 @@ public class AndroidController {
 		androidList.add(android5);
 		 
 		
+		
 		try {
 			result.use(ExtJSJson.class).from(androidList).success().serialize();
 		} catch (Exception ex) {
