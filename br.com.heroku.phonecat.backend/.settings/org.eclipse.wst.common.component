@@ -2,6 +2,7 @@
     <wb-module deploy-name="br.com.heroku.phonecat.backend">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <property name="context-root" value="br.com.heroku.phonecat.backend"/>
         <property name="java-output-path" value="/br.com.heroku.phonecat.backend/target/classes"/>
     </wb-module>
