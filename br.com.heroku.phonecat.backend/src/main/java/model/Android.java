@@ -1,45 +1,48 @@
 package model;
 
+import net.vz.mongodb.jackson.Id;
+import net.vz.mongodb.jackson.ObjectId;
+
 
 public class Android {
-	
-	private Long id;
+	@ObjectId @Id
+	private String id;
 	private String os;
 	private String ui;
-	
+
 	public Android() {
 		super();
 	}
 
-	public Android(Long id, String os, String ui) {
+	public Android(String id, String os, String ui) {
 		super();
 		this.id = id;
 		this.os = os;
 		this.ui = ui;
 	}
-	
-	public Long getId() {
+
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+
+	public void setId(String id) {
 		this.id = id;
 	}
+
 	public String getOs() {
 		return os;
 	}
+
 	public void setOs(String os) {
 		this.os = os;
 	}
+
 	public String getUi() {
 		return ui;
 	}
+
 	public void setUi(String ui) {
 		this.ui = ui;
-	}
-
-	@Override
-	public String toString() {
-		return "Android [id=" + id + ", os=" + os + ", ui=" + ui + "]";
 	}
 
 	
