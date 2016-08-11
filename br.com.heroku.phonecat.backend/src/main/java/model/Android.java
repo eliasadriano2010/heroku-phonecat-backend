@@ -1,5 +1,7 @@
 package model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import net.vz.mongodb.jackson.Id;
 import net.vz.mongodb.jackson.ObjectId;
 
@@ -20,7 +22,7 @@ public class Android {
 		this.os = os;
 		this.ui = ui;
 	}
-
+	@JsonProperty("_id")
 	public String getId() {
 		return id;
 	}

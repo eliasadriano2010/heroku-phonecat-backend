@@ -3,6 +3,8 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import model.Android;
 import util.AjaxReturn;
 import br.com.caelum.vraptor.Consumes;
@@ -63,6 +65,7 @@ public class AndroidController {
 	@Consumes("application/json")
 	public void create(Android android) {
 		AjaxReturn ajaxReturn = new AjaxReturn();
+		android.setId(ObjectId.get().toString());
 		try {
 			List<String> errors = validation(android);
 
