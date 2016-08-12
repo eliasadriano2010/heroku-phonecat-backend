@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import model.Android;
+import model.Camera;
 import util.AjaxReturn;
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Get;
@@ -17,12 +17,12 @@ import br.com.caelum.vraptor.util.extjs.ExtJSJson;
 import dao.GenericDAOMongoDB;
 
 @Resource
-public class AndroidController {
+public class CameraController {
 
 	// ---------------- attributes
 	// ---------------------------------------------------------------
 
-	private GenericDAOMongoDB<Android> genericDaoMongoDB;
+	private GenericDAOMongoDB<Camera> genericDAOMongoDB;
 	private Result result;
 	private Validator validator;
 
@@ -30,19 +30,22 @@ public class AndroidController {
 	// --------------------------------------------------------------
 
 	// dependency injector will call this constructor and get all dependencies
-	public AndroidController(Result result, Validator validator) {
+	public CameraController(Result result, Validator validator) {
 		super();
-		this.genericDaoMongoDB = new GenericDAOMongoDB<Android>(Android.class);
+		// Generic Dao could not be called using dependency injection because
+		// objectify needs register class
+		this.genericDAOMongoDB = new GenericDAOMongoDB<Camera>(
+				Camera.class);
 		this.result = result;
 		this.validator = validator;
 	}
 
-	// GET /android/list => retrieve a full list (in ExtJSJson JSON format)
+	// GET /camera/list => retrieve a full list (in ExtJSJson JSON format)
 	// containing all entities
 	@Get
 	public void list() {
 		try {
-			result.use(ExtJSJson.class).from(genericDaoMongoDB.getEntities())
+			result.use(ExtJSJson.class).from(genericDAOMongoDB.getEntities())
 					.success().serialize();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -54,7 +57,7 @@ public class AndroidController {
 	// accepted format:
 
 	// var data = {
-	// android : {
+	// camera : {
 	// "id" : $scope.vm.id,
 	// "os" : $scope.vm.os != undefined ? $scope.vm.os:'',
 	// "ui" : $scope.vm.ui != undefined ? $scope.vm.ui : ''
@@ -63,37 +66,33 @@ public class AndroidController {
 
 	@Post
 	@Consumes("application/json")
-	public void create(Android android) {
+	public void create(Camera camera) {
 		AjaxReturn ajaxReturn = new AjaxReturn();
-		if (android.getId() == null) {
-			android.setId(ObjectId.get().toString());
-		}
+		
 		try {
-			List<String> errors = validation(android);
+			List<String> errors = validation(camera);
 
 			if (errors.isEmpty()) {
-				if (android.getId() == null) {
-					android.setId(ObjectId.get().toString());
-					genericDaoMongoDB.insertEntity(android);
+				if (camera.getId() == null) {
+					camera.setId(ObjectId.get().toString());
+					genericDAOMongoDB.insertEntity(camera);
 				} else {
-					genericDaoMongoDB.updateEntity(android, android.getId());
+					genericDAOMongoDB.updateEntity(camera, camera.getId());
 				}
-
-				ajaxReturn.setSucess(errors.isEmpty());
 			} else {
 				ajaxReturn.setSucess(false);
 				ajaxReturn.addErrors(errors);
 			}
 		} catch (Exception ex) {
 			ajaxReturn.setSucess(false);
-			ajaxReturn.addErrors(genericDaoMongoDB.getErrors());
+			ajaxReturn.addErrors(genericDAOMongoDB.getErrors());
 		}
 		result.use(ExtJSJson.class).from(ajaxReturn).serialize();
 	}
 
 	// This private method receives an object performs validation and returns a
 	// list containing errors message
-	private List<String> validation(Android android) {
+	private List<String> validation(Camera camera) {
 		List<String> erros = new ArrayList<String>();
 		return erros;
 	}
@@ -103,7 +102,7 @@ public class AndroidController {
 	// accepted format:
 
 	// var data = {
-	// android : {
+	// camera : {
 	// "id" : $scope.vm.id,
 	// "os" : $scope.vm.os != undefined ? $scope.vm.os:'',
 	// "ui" : $scope.vm.ui != undefined ? $scope.vm.ui : ''
@@ -112,13 +111,13 @@ public class AndroidController {
 
 	@Post
 	@Consumes("application/json")
-	public void update(Android android) {
+	public void update(Camera camera) {
 		AjaxReturn ajaxReturn = new AjaxReturn();
 		try {
-			List<String> errors = validation(android);
+			List<String> errors = validation(camera);
 
 			if (errors.isEmpty()) {
-				genericDaoMongoDB.updateEntity(android, android.getId());
+				genericDAOMongoDB.insertEntity(camera);
 				ajaxReturn.setSucess(errors.isEmpty());
 			} else {
 				ajaxReturn.setSucess(false);
@@ -126,12 +125,12 @@ public class AndroidController {
 			}
 		} catch (Exception ex) {
 			ajaxReturn.setSucess(false);
-			ajaxReturn.addErrors(genericDaoMongoDB.getErrors());
+			ajaxReturn.addErrors(genericDAOMongoDB.getErrors());
 		}
 		result.use(ExtJSJson.class).from(ajaxReturn).serialize();
 	}
 
-	// POST /android/delete => this method receives a JSON request containing
+	// POST /camera/delete => this method receives a JSON request containing
 	// id as parameter, deleted related entity and
 	// answers if the entitiy was deleted successfully.
 	// accpted format:
@@ -143,13 +142,13 @@ public class AndroidController {
 	public void delete(String id) {
 		AjaxReturn ajaxReturn = new AjaxReturn();
 		try {
-			genericDaoMongoDB.deleteEntity(id);
-			if (genericDaoMongoDB.getErrors().isEmpty()) {
+			genericDAOMongoDB.deleteEntity(id);
+			if (genericDAOMongoDB.getErrors().isEmpty()) {
 				ajaxReturn.setSucess(true);
 				ajaxReturn.setAlert("Deleted sucessfully!");
 				result.use(ExtJSJson.class).from(ajaxReturn).serialize();
 			} else {
-				ajaxReturn.addErrors(genericDaoMongoDB.getErrors());
+				ajaxReturn.addErrors(genericDAOMongoDB.getErrors());
 				result.use(ExtJSJson.class).from(ajaxReturn).serialize();
 			}
 		} catch (Exception ex) {

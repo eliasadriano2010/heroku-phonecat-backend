@@ -157,18 +157,7 @@ public class MongoDBManagement {
 	// *********************************** Consultas
 	// *****************************//
 
-	public static Document retrieveDocumentByID(
-			final MongoCollection<Document> collection, final String id) {
-		BasicDBObject query = new BasicDBObject();
-		query.append("_id", id);
-
-		for (Document doc : collection.find(query)) {
-			return doc;
-		}
-
-		return null;
-
-	}
+	
 
 	public static DeleteResult deleteOneFromCollection(
 			final MongoCollection<Document> collection, final String id) {
@@ -197,19 +186,7 @@ public class MongoDBManagement {
 		return result;
 	}
 
-//	public static List<Document> retrieveAllDocuments(
-//			final MongoCollection<Document> collection) {
-//
-//		List<Document> result = new ArrayList<Document>();
-//
-//		System.out.println("----[All Items in the" + collection.getNamespace()
-//				+ " Collection]----");
-//		for (Document doc : collection.find()) {
-//			System.out.println("object:" + doc.toJson() + "\n");
-//			result.add(doc);
-//		}
-//		return result;
-//	}
+
 	
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> retrieveAllDocuments(final MongoCollection<Document> collection, Class clazz) {
@@ -227,6 +204,27 @@ public class MongoDBManagement {
 		return result;
 	}
 
+	
+	public static <T> T retrieveDocumentByID(final MongoCollection<Document> collection, Class clazz, final String id) {
+		
+		BasicDBObject query = new BasicDBObject();
+		query.append("_id", id);
+
+		for (Document document : collection.find(query)) {
+			try {
+				return (T) getPojo(document, clazz);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+
+	}
+	
+	
+	
 	public static <T> T getPojo(Document document, Class<T> clazz)
 			throws IOException {
 		ObjectMapper mapper = new ObjectMapper();

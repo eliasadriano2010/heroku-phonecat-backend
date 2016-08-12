@@ -47,6 +47,14 @@ public class Android {
 		this.ui = ui;
 	}
 
+	@Override
+	public String toString() {
+		return "Android [id=" + id + ", os=" + os + ", ui=" + ui + "]";
+	}
+
+	
+
+	
 	
 
 }

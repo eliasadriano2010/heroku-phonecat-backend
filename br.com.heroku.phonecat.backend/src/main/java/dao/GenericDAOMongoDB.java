@@ -164,18 +164,20 @@ public class GenericDAOMongoDB<T> {
 	/**
 	 * return the entire list of Entity
 	 */
-	// public T getEntityById(String id) {
-	// try {
-	// return ofy().load().type(this.typeParameterClass).id(id).safe();
-	// } catch (Exception ex) {
-	// errors.add("An error has ocurred in method getEntityById(long id): "
-	// + ex.getCause());
-	//
-	// ex.printStackTrace();
-	// }
-	//
-	// return null;
-	// }
+	public T getEntityById(String id) {
+		try {
+			return MongoDBManagement.retrieveDocumentByID(
+					mongoDatabaseSettings.getCollection(), typeParameterClass,
+					id);
+		} catch (Exception ex) {
+			errors.add("An error has ocurred in method getEntityById(long id): "
+					+ ex.getCause());
+
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
 
 	/**
 	 * Insert one Entity Synchronous insert to get the ID
@@ -185,6 +187,7 @@ public class GenericDAOMongoDB<T> {
 	 */
 	public void insertEntity(T object) {
 		try {
+			
 			MongoDBManagement.insertIntoCollection(
 					mongoDatabaseSettings.getCollection(), object);
 		} catch (Exception ex) {
@@ -219,7 +222,8 @@ public class GenericDAOMongoDB<T> {
 	 */
 	public void deleteEntity(String id) {
 		try {
-				MongoDBManagement.deleteOneFromCollection(mongoDatabaseSettings.getCollection(), id);
+			MongoDBManagement.deleteOneFromCollection(
+					mongoDatabaseSettings.getCollection(), id);
 		} catch (Exception ex) {
 			errors.add("An error has ocurred in method insertEntities(List<T> objects): "
 					+ ex.getCause());
