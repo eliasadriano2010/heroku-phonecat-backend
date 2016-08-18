@@ -23,6 +23,8 @@ public class MongoDatabaseSettings {
 		collection = database.getCollection("default");
 	}
 
+
+	
 	public MongoDatabaseSettings(MongoClientURI uri, MongoClient client,
 			MongoDatabase database, MongoCollection<Document> collection) {
 		super();
